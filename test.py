@@ -62,7 +62,7 @@ def test_pay_transfer():
     except urllib2.HTTPError, response:
         location = response.hdrs.get('location')
         try:
-            br.open('http://test-www.payson.se' + location)
+            br.open(location)
         except urllib2.HTTPError, response:
             location = response.hdrs.get('location')
             params = urlparse.parse_qs(location.split('?')[1])
@@ -125,7 +125,6 @@ def test_pay_invoice():
     br.open(r.forward_pay_url)
     br.select_form(nr=0)
     br['QuickAgentCheckout1$txtSsn'] = pnr
-    br['QuickAgentCheckout1$txtPostalCode'] = '12345'
     br.submit()
     try:
         br.select_form(nr=0)
@@ -152,4 +151,3 @@ def test_pay_invoice():
     assert r4.success
     assert r4.status == 'PENDING', r4.status
     assert r4.invoiceStatus == 'SHIPPED', r4.invoiceStatus
-
