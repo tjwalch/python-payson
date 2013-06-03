@@ -77,6 +77,7 @@ def test_pay_transfer():
     assert r2.status == 'COMPLETED'
     assert r2.custom == custom, custom
     assert r2.trackingId == u'ÅÄÖ'
+    assert r2.receiverFee == decimal.Decimal('6.75')
 
 
 def test_error():

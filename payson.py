@@ -372,6 +372,7 @@ class PaymentDetails(object):
         self.custom = custom and json.loads(custom)
         self.trackingId = data.get('trackingId', '').decode('utf-8')
         self.currencyCode = data['currencyCode']
+        self.receiverFee = decimal.Decimal(data['receiverFee'])
         self.receiverList = Receiver.from_response_data(data)
         if 'shippingAddress.name' in data:
             self.shippingAddress = ShippingAddress(data)
