@@ -361,6 +361,7 @@ class PaymentDetails(object):
     """
     def __init__(self, data):
         self.purchaseId = data.get('purchaseId', '')
+        self.token = data.get('token')
         self.senderEmail = data['senderEmail']
         self.status = data['status']
         self.type = data['type']
