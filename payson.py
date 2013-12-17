@@ -23,8 +23,9 @@ PAYSON_API_VALIDATE_ACTION = "Validate/"
 PAYSON_WWW_PAY_FORWARD_URL = 'https://www.payson.se/paysecure/?token=%s'
 PAYSON_WWW_PAY_FORWARD_TEST_URL = \
     'https://test-www.payson.se/paysecure/?token=%s'
-PAYSON_TEST_AGENT_ID = '1'
-PAYSON_TEST_AGENT_KEY = 'fddb19ac-7470-42b6-a91d-072cb1495f0a'
+PAYSON_TEST_AGENT_ID = ('1', '4')
+PAYSON_TEST_AGENT_KEY = ('fddb19ac-7470-42b6-a91d-072cb1495f0a',
+                         '2acab30d-fe50-426f-90d7-8c60a7eb31d4')
 
 log = logging.getLogger('Payson API')
 
@@ -39,8 +40,8 @@ class PaysonApi():
         :param user_key: Password (MD5 Key) obtained from Payson
         :type user_key: str
         """
-        if (user_id == PAYSON_TEST_AGENT_ID and
-            user_key == PAYSON_TEST_AGENT_KEY):
+        if (user_id in PAYSON_TEST_AGENT_ID and
+            user_key in PAYSON_TEST_AGENT_KEY):
             endpoint = PAYSON_TEST_API_ENDPOINT
             self.forward_pay_url = PAYSON_WWW_PAY_FORWARD_TEST_URL
         else:
