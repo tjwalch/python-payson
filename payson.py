@@ -78,7 +78,8 @@ class PaysonApi():
             custom=None,
             trackingId=None,
             guaranteeOffered=None,
-            orderItemList=tuple()):
+            orderItemList=tuple(),
+            showReceiptPage=True):
         """The starting point for any kind of payment.
 
         For a longer description, including possible parameter values and 
@@ -94,13 +95,14 @@ class PaysonApi():
         :type ipnNotificationUrl: unicode
         :type localeCode: unicode
         :type currencyCode: unicode
-        :type fundingList: iterable with unicode istances
+        :type fundingList: iterable with unicode instances
         :type feesPayer: unicode
         :type invoiceFee: decimal.Decimal
         :type custom: any json serializable Python object
         :type trackingId: unicode or int
         :type guaranteeOffered: unicode
         :type orderItemList: iterable of OrderItem instances
+        :type showReceiptPage: bool
         :rtype: PayResponse
         """
         pay_request = {'returnUrl': returnUrl,
@@ -145,8 +147,9 @@ class PaysonApi():
             pay_request[k % (i, 'quantity')] = str(v.quantity)
             pay_request[k % (i, 'unitPrice')] = str(v.unitPrice)
             pay_request[k % (i, 'taxPercentage')] = str(v.taxPercentage)
-        response_dict = self._do_request(self.pay_cmd,
-                                         pay_request)
+        if showReceiptPage is False:
+            pay_request['showReceiptPage'] = json.dumps(showReceiptPage)
+        response_dict = self._do_request(self.pay_cmd, pay_request)
         pay_response = PayResponse(self.forward_pay_url, response_dict)
         log.info('PAYSON: %s response: %r' % (self.pay_cmd, response_dict))
         return pay_response
@@ -378,6 +381,11 @@ class PaymentDetails(object):
         self.receiverList = Receiver.from_response_data(data)
         if 'shippingAddress.name' in data:
             self.shippingAddress = ShippingAddress(data)
+        self.post_data = data.copy()
+
+    @property
+    def amount(self):
+        return sum(receiver.amount for receiver in self.receiverList)
 
 
 class PaymentDetailsResponse(PaymentDetails):
@@ -393,4 +401,3 @@ class PaymentDetailsResponse(PaymentDetails):
     def success(self):
         """True if request succeeded."""
         return self.responseEnvelope.success
-
