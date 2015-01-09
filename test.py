@@ -6,13 +6,13 @@ import urlparse
 
 import mechanize
 
-import payson
+import payson_api
 
 PAYSON_AGENT_ID = '1'
 PAYSON_AGENT_KEY = 'fddb19ac-7470-42b6-a91d-072cb1495f0a'
 return_url = "http://localhost/return_url"
 cancel_url = "http://localhost/cancel_url"
-receiver = payson.Receiver(email='testagent-1@payson.se',
+receiver = payson_api.Receiver(email='testagent-1@payson.se',
                            firstName=u'Åke',
                            lastName=u'Öster',
                            amount=125,
@@ -21,7 +21,7 @@ receiver = payson.Receiver(email='testagent-1@payson.se',
 
 def test_pay_transfer():
     custom = ['list', 'of', 'custom', 'things', u'åäö']
-    api = payson.PaysonApi(PAYSON_AGENT_ID,
+    api = payson_api.PaysonApi(PAYSON_AGENT_ID,
                            PAYSON_AGENT_KEY)
     r = api.pay(returnUrl=return_url,
                 cancelUrl=cancel_url,
@@ -37,12 +37,12 @@ def test_pay_transfer():
                 feesPayer='PRIMARYRECEIVER',
                 trackingId=u'ÅÄÖ',
                 guaranteeOffered='NO',
-                orderItemList=[payson.OrderItem('description item one',
+                orderItemList=[payson_api.OrderItem('description item one',
                                                 1,
                                                 10,
                                                 5,
                                                 decimal.Decimal(0.25)),
-                               payson.OrderItem('description item two',
+                               payson_api.OrderItem('description item two',
                                                 2,
                                                 5,
                                                 10,
@@ -81,7 +81,7 @@ def test_pay_transfer():
 
 
 def test_error():
-    api = payson.PaysonApi(PAYSON_AGENT_ID,
+    api = payson_api.PaysonApi(PAYSON_AGENT_ID,
                            PAYSON_AGENT_KEY)
     r = api.pay(returnUrl=return_url,
                 cancelUrl=cancel_url,
@@ -90,7 +90,7 @@ def test_error():
                 senderFirstName=u'Tester',
                 senderLastName=u'Räksmörgås',
                 receiverList=[receiver, ],
-                orderItemList=[payson.OrderItem('description item one',
+                orderItemList=[payson_api.OrderItem('description item one',
                                             1,
                                             10,
                                             5,
@@ -100,7 +100,7 @@ def test_error():
 
 
 def test_pay_invoice():
-    api = payson.PaysonApi(PAYSON_AGENT_ID,
+    api = payson_api.PaysonApi(PAYSON_AGENT_ID,
                            PAYSON_AGENT_KEY)
     r = api.pay(returnUrl=return_url,
                 cancelUrl=cancel_url,
@@ -110,12 +110,12 @@ def test_pay_invoice():
                 senderLastName=u'Räksmörgås',
                 receiverList=[receiver, ],
                 fundingList=['INVOICE', ],
-                orderItemList=[payson.OrderItem('description item one',
+                orderItemList=[payson_api.OrderItem('description item one',
                                                 1,
                                                 10,
                                                 5,
                                                 decimal.Decimal(0.25)),
-                               payson.OrderItem('description item two',
+                               payson_api.OrderItem('description item two',
                                                 2,
                                                 5,
                                                 10,

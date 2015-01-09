@@ -204,7 +204,12 @@ class PaysonApi():
         response = self._send_request(self.validate_ipn_cmd, message)
         log.info('PAYSON: %s response: %r' % (self.validate_ipn_cmd,
                                               response))
-        return response == 'VERIFIED'
+        if response == 'VERIFIED':
+            return True
+        elif response == 'INVALID':
+            return False
+        else:
+            raise ValueError('Invalid response for IPN validation.')
 
     def _do_request(self, cmd, data):
         query = urllib.urlencode(data)
@@ -289,8 +294,8 @@ class Receiver(object):
                 cls(data['receiverList.receiver(%d).email' % i],
                     data['receiverList.receiver(%d).amount' % i],
                     primary)
-                )
-            i = i + 1
+            )
+            i += 1
         return receivers
 
 
@@ -310,8 +315,8 @@ class Error(object):
                 cls(data['errorList.error(%d).errorId' % i],
                     data['errorList.error(%d).message' % i],
                     data.get('errorList.error(%d).parameter' % i))
-                )
-            i = i + 1
+            )
+            i += 1
         return errors
 
 
@@ -365,7 +370,7 @@ class PaymentDetails(object):
     def __init__(self, data):
         self.purchaseId = data.get('purchaseId', '')
         self.token = data.get('token')
-        self.senderEmail = data['senderEmail']
+        self.senderEmail = data.get('senderEmail', '')
         self.status = data['status']
         self.type = data['type']
         self.guaranteeStatus = data.get('guaranteeStatus')

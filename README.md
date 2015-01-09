@@ -1,9 +1,13 @@
 # python-payson
 
-Python API to the [Payson payments provider](http://www.payson.se).
+Python API to the [Payson payments provider](http://www.payson.se/).
 
 ## Installation
-The entire library is contained in a single Python module, `payson.py`. Just drop it anywhere in your projects PYTHONPATH.
+From pypi (recommended):
+
+    $ pip install payson_api
+
+If this doesn't work the entire library is contained in a single Python module, `payson_api.py`. Just drop it anywhere in your projects PYTHONPATH.
 It is not dependent on anything outside the Python standard library (except in the tests). 
 
 Tested with Python 2.7.
@@ -12,11 +16,11 @@ Tested with Python 2.7.
 Initiate payment:
 
     import decimal
-    import payson
+    import payson_api
 
-    from settings import payson_user_id, payson_user_key
+    from your_settings_module import payson_user_id, payson_user_key
 
-    api = payson.PaysonApi(payson_user_id, payson_user_key)
+    api = payson_api.PaysonApi(payson_user_id, payson_user_key)
 
     receiver = payson.Receiver(email='payments@example.com',
                                firstName=u'Pelle',
@@ -52,12 +56,13 @@ Get payment details:
 - the 'custom' field is serialized/deserialized with JSON
         
 ## More documentation
-Please see the docstrings included in `payson.py` and/or the [Payson API documentation](http://api.payson.se)
+Please see the docstrings included in `payson_api.py` and/or the [Payson API documentation](http://api.payson.se/)
 
 ## Testing
 The PaysonApi constructor detects if user id and key used are testing credentials and will then use the Payson test system.
 
 The included `test.py` file includes some automated tests using python-mechanize that can be run with nosetests.
+The tests are broken right now due to changes in the flow over at Payson. Fixing this is on the TODO list :)
 
 ## Contact
 The author of this software offers integration services if requested. Reach him through github.
